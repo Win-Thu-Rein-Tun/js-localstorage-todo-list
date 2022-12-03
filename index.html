@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,6 +9,7 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/all.min.css">
 </head>
+
 <body>
     <div class="navbar navbar-dark bg-primary">
         <div class="container-fluid">
@@ -30,20 +32,22 @@
         </ul>
     </div>
 
-   
+    <!-- just test -->
+
+
     <script>
 
         let data = JSON.parse(localStorage.getItem("data")) || [];
-        for(let i = 0; i<data.length; i++){
+        for (let i = 0; i < data.length; i++) {
             createItem(data[i]);
         }
 
         //data.map(i => createItem(i));
-      
-        document.querySelector("button").onclick = function(){
+
+        document.querySelector("button").onclick = function () {
             let text = document.querySelector("#new").value;
 
-            if(!text) return false;
+            if (!text) return false;
             createItem(text);
 
             let data = JSON.parse(localStorage.getItem("data")) || [];
@@ -52,8 +56,8 @@
         }
 
         //press enter
-        document.querySelector("input").onkeydown = function(e){
-            if(e.which == 13){
+        document.querySelector("input").onkeydown = function (e) {
+            if (e.which == 13) {
                 document.querySelector("button").onclick();
             }
         }
@@ -68,7 +72,7 @@
             }
         }
 
-        function createItem(text){
+        function createItem(text) {
 
             // Save Data
             let li = document.createElement("li");
@@ -87,26 +91,27 @@
             check.setAttribute("href", "#");
             check.classList.add("fas", "fa-check", "float-start", "me-4");
             //check.textContent = "Done";
-            check.onclick = function(){
+            check.onclick = function () {
                 document.querySelector("#done").appendChild(li);
                 check.remove();
             }
             li.appendChild(check);
-            
+
             // Delete
             let del = document.createElement("a");
             del.setAttribute("href", "#");
             del.classList.add("fas", "fa-trash", "float-end", "text-danger");
             //del.innerHTML = "&times;";
-            del.onclick = function(){
+            del.onclick = function () {
                 let data = JSON.parse(localStorage.getItem("data")) || [];
                 data = data.filter(i => i !== text);
                 localStorage.setItem("data", JSON.stringify(data));
                 li.remove();
 
             }
-            li.appendChild(del); 
+            li.appendChild(del);
         }
     </script>
 </body>
+
 </html>
