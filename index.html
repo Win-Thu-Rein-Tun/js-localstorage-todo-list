@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do List</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/all.min.css">
+</head>
+<body>
+    <div class="navbar navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a href="#" class="navbar-brand">Todo List</a>
+        </div>
+    </div>
+    <div class="container mt-4" style="max-width: 500px;">
+        <div class="input-group mb-4">
+            <input type="text" id="new" class="form-control">
+            <button class="btn btn-success">ADD</button>
+        </div>
+        <ul id="todo" class="list-group mb-4">
+            <li class="list-group-item active">Todo</li>
+        </ul>
+        <ul id="done" class="list-group">
+            <li class="list-group-item bg-secondary text-light">
+                Done
+                <a href="#" class="float-end text-warning" id="clear">Clear</a>
+            </li>
+        </ul>
+    </div>
+
+   
+    <script>
+
+        let data = JSON.parse(localStorage.getItem("data")) || [];
+        for(let i = 0; i<data.length; i++){
+            createItem(data[i]);
+        }
+
+        //data.map(i => createItem(i));
+      
+        document.querySelector("button").onclick = function(){
+            let text = document.querySelector("#new").value;
+
+            if(!text) return false;
+            createItem(text);
+
+            let data = JSON.parse(localStorage.getItem("data")) || [];
+            data.push(text);
+            localStorage.setItem("data", JSON.stringify(data));
+        }
+
+        //press enter
+        document.querySelector("input").onkeydown = function(e){
+            if(e.which == 13){
+                document.querySelector("button").onclick();
+            }
+        }
+
+        // Clear
+        document.querySelector("#clear").onclick = function () {
+            if (confirm("Are you sure?")) {
+                let lis = document.querySelectorAll("#done li");
+                for (let i = 0; i < lis.length; i++) {
+                    if (i > 0) lis[i].remove();
+                }
+            }
+        }
+
+        function createItem(text){
+
+            // Save Data
+            let li = document.createElement("li");
+            li.classList.add("list-group-item");
+
+            li.textContent = text;
+            //document.querySelector("#todo").innerHTML = li;
+
+            document.querySelector("#todo").appendChild(li);
+
+            document.querySelector("#new").value = "";
+            document.querySelector("#new").focus();
+
+            // Check 
+            let check = document.createElement("a");
+            check.setAttribute("href", "#");
+            check.classList.add("fas", "fa-check", "float-start", "me-4");
+            //check.textContent = "Done";
+            check.onclick = function(){
+                document.querySelector("#done").appendChild(li);
+                check.remove();
+            }
+            li.appendChild(check);
+            
+            // Delete
+            let del = document.createElement("a");
+            del.setAttribute("href", "#");
+            del.classList.add("fas", "fa-trash", "float-end", "text-danger");
+            //del.innerHTML = "&times;";
+            del.onclick = function(){
+                let data = JSON.parse(localStorage.getItem("data")) || [];
+                data = data.filter(i => i !== text);
+                localStorage.setItem("data", JSON.stringify(data));
+                li.remove();
+
+            }
+            li.appendChild(del); 
+        }
+    </script>
+</body>
+</html>
